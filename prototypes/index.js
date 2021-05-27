@@ -27,7 +27,16 @@ const kittyPrompts = {
 
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    var orangeKitties = kitties.filter((kitty) => {
+      return kitty.color === 'orange';
+    });
+
+    const result = orangeKitties.map(orangeKitty => {
+      return orangeKitty.name;
+    });
+
+    //I can chain these suckers together!
+
     return result;
 
     // Annotation:
@@ -36,8 +45,11 @@ const kittyPrompts = {
 
   sortByAge() {
     // Sort the kitties by their age
+    let agedKitties = kitties.sort((a, b) => {
+      return b.age - a.age;
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = agedKitties;
     return result;
 
     // Annotation:
@@ -58,7 +70,11 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.map((kitty) => {
+      kitty.age += 2;
+      return kitty;
+    });
+
     return result;
   }
 };
@@ -90,7 +106,19 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = clubs.reduce((accumaltorObj, currentClub) => {
+      
+      currentClub.members.forEach(member => {
+        if (!accumaltorObj[member]) {
+          accumaltorObj[member] = [currentClub.club];
+        } else {
+          accumaltorObj[member].push(currentClub.club);
+        }
+      });
+      return accumaltorObj;
+    }, {});
+
+    console.log(result);
     return result;
 
     // Annotation:
@@ -125,8 +153,16 @@ const modPrompts = {
     //   { mod: 3, studentsPerInstructor: 10 },
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    //keep the first key-value pair in the mod object,
+    //then assign a new key named studentsPerInstructtor with the value
+    // of students divided by instructors
+    let mappedMod = mods.map((mod) => {
+      return {
+        mod: mod.mod,
+        studentsPerInstructor: (mod.students/mod.instructors)
+      };
+    });
+    const result = mappedMod;
     return result;
 
     // Annotation:
@@ -161,7 +197,12 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.map((cake) => {
+      return {
+        flavor: cake.cakeFlavor,
+        inStock: cake.inStock
+      };
+    });
     return result;
 
     // Annotation:
@@ -189,7 +230,12 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter((cake) => { 
+      if(cake.inStock > 0){
+        return cake;
+      }
+    });
+    //console.log(result);
     return result;
 
     // Annotation:
@@ -199,9 +245,14 @@ const cakePrompts = {
   totalInventory() {
     // Return the total amount of cakes in stock e.g.
     // 59
+    let amountCakes = 0;
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const result = cakes.forEach((cake) => {
+      amountCakes += cake.inStock;
+    });
+
+    //console.log(amountCakes);
+    return amountCakes;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -211,9 +262,19 @@ const cakePrompts = {
     // Return an array of all unique toppings (no duplicates) needed to bake
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
+    let toppings = [];
+    const result = cakes.forEach((cake) => {
+      cake.toppings.forEach((topping) => {
+        if(!toppings.includes(topping)){
+          console.log(toppings);
+          toppings.push(topping);
+        } else {
+          console.log('Hey ingredient is already in our array');
+        }
+      });
+    });
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    return toppings;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -229,8 +290,37 @@ const cakePrompts = {
     //    'berries': 2,
     //    ...etc
     // }
+    let toppings = [];
+    cakes.forEach((cake) => {
+      cake.toppings.forEach((topping) => {
+        toppings.push(topping);
+      });
+    });
+    toppings.sort();
+    console.log(toppings);
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const noDoubles = [...new Set(toppings)];
+
+    console.log(noDoubles);
+
+    let groceryList = {};
+    noDoubles.forEach((item) => {
+      groceryList[`${item}`] = helper(item);
+    });
+
+    
+    function helper(itemName){
+      let count = 0;
+      toppings.map((topping) => {
+        if(topping === itemName){
+          count++;
+        }
+      });
+      return count;
+    }
+    console.log(groceryList);
+
+    const result = groceryList;
     return result;
 
     // Annotation:
@@ -265,7 +355,7 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.filter((classroom) =>  classroom.program === 'FE');
     return result;
 
     // Annotation:
@@ -279,8 +369,19 @@ const classPrompts = {
     //   feCapacity: 110,
     //   beCapacity: 96
     // }
+    let turingCapacity = {
+      'feCapacity': 0,
+      'beCapacity': 0,
+    };
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    classrooms.forEach((classroom) => {
+      if(classroom.program === 'FE'){
+        turingCapacity.feCapacity += classroom.capacity;
+      } else {
+        turingCapacity.beCapacity += classroom.capacity;
+      }
+    });
+    const result = turingCapacity;
     return result;
 
     // Annotation:
@@ -290,7 +391,11 @@ const classPrompts = {
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    classrooms.sort((a, b) => {
+      return a.capacity - b.capacity;
+    });
+    console.log(classrooms);
+    const result = classrooms;
     return result;
 
     // Annotation:
@@ -316,8 +421,16 @@ const bookPrompts = {
     //   'The Curious Incident of the Dog in the Night - Time', 'The Bell Jar',
     //   'Catch-22', 'Treasure Island']
 
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    //  so we're going to iterate over all the books
+    // in our book array
+    //we're going to check the genre for a boolean that makes
+    //sure 'Horror' and 'True Crime' do not equal  our genre.
+    const result = books.reduce((accumaltorArr, currentBook) => {
+      if (currentBook.genre !== 'Horror' && currentBook.genre !== 'True Crime') {
+        accumaltorArr.push(currentBook.title);
+      }
+      return accumaltorArr;
+    }, []);
     return result;
 
     // Annotation:
@@ -352,10 +465,20 @@ const bookPrompts = {
 
 const weatherPrompts = {
   getAverageTemps() {
+    //iterate over each city and it's associated weather properties
+    //we're going to access the key at temperature and we're going to add together
+    // the high and the low temp and divide by 2. 
+    //store that average value in an array.
+
+    
+
     // return an array of all the average temperatures. Eg:
     // [ 40, 40, 44.5, 43.5, 57, 35, 65.5, 62, 14, 46.5 ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.map(city => {
+      return (city.temperature.high + city.temperature.low) / 2;
+    });
+
     return result;
 
     // Annotation:
@@ -369,7 +492,12 @@ const weatherPrompts = {
     // 'New Orleans, Louisiana is sunny.',
     // 'Raleigh, North Carolina is mostly sunny.' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.reduce( (accumulator, city) => {
+      if (city.type === 'sunny' || city.type === 'mostly sunny') {
+        accumulator.push(`${city.location} is ${city.type}.`);
+      }
+      return accumulator;
+    }, []);
     return result;
 
     // Annotation:
@@ -412,7 +540,23 @@ const nationalParksPrompts = {
     //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
     //}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = nationalParks.reduce((accumulatorObj, currentNationalPark) => {
+      if(currentNationalPark.visited) {
+        if(!accumulatorObj.parksVisited) {
+          accumulatorObj.parksVisited = [currentNationalPark.name];
+        } else {
+          accumulatorObj.parksVisited.push(currentNationalPark.name);
+        }
+      } else {
+        if(!accumulatorObj.parksToVisit) {
+          accumulatorObj.parksToVisit = [currentNationalPark.name];
+        } else {
+          accumulatorObj.parksToVisit.push(currentNationalPark.name);
+        }
+      }
+      console.log(accumulatorObj);
+      return accumulatorObj;
+    }, {});
     return result;
 
     // Annotation:

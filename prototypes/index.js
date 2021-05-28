@@ -654,7 +654,10 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((acc, curBrewery) => {
+      acc += curBrewery.beers.length;
+      return acc;
+    }, 0);
     return result;
 
     // Annotation:
@@ -670,7 +673,14 @@ const breweryPrompts = {
     // ...etc.
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((acc, curBrewery) => {
+      
+      let obj = { name : curBrewery.name, beerCount: curBrewery.beers.length};
+      
+      acc.push(obj);
+    
+      return acc;
+    }, []);
     return result;
 
     // Annotation:
@@ -678,11 +688,20 @@ const breweryPrompts = {
   },
 
   findHighestAbvBeer() {
+    let highestAbvBeer = breweries[0].beers[0];
+
+    breweries.forEach(brewery => {
+      brewery.beers.forEach(beer => {
+        if(beer.abv > highestAbvBeer.abv) {
+          highestAbvBeer = beer;
+        }
+      });
+    });
     // Return the beer which has the highest ABV of all beers
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = highestAbvBeer;
     return result;
 
     // Annotation:

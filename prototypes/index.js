@@ -445,7 +445,18 @@ const bookPrompts = {
     //  { title: 'Life of Pi', year: 2001 },
     //  { title: 'The Curious Incident of the Dog in the Night-Time', year: 2003 }]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = books.reduce((accumaltorArr, currentBook) => {
+
+      //def going to be some edge-cases but don't worry about that now
+      if((currentBook.published % 100 >= 90 || currentBook.published % 100 <= 10) && currentBook.published % 1000 !== 897) {
+        accumaltorArr.push(
+          {title : currentBook.title,
+            year : currentBook.published,
+          });
+      }
+      return accumaltorArr;
+    } , []);
+
     return result;
 
     // Annotation:
@@ -513,8 +524,16 @@ const weatherPrompts = {
     //   temperature: { high: 49, low: 38 }
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let mostHumidCity = {};
+    const result = weather.forEach(city => {
+      if(!Object.keys(mostHumidCity).length) {
+        mostHumidCity = city;
+      }
+      else if(city.humidity > mostHumidCity.humidity){
+        mostHumidCity = city;
+      }
+    });
+    return mostHumidCity;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -573,7 +592,13 @@ const nationalParksPrompts = {
     // { Florida: 'Everglades' } ]
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = nationalParks.reduce((accumaltorArr, currentNationalPark) => {
+      let parkLocation = { [currentNationalPark.location] : currentNationalPark.name };
+      accumaltorArr.push(parkLocation);
+
+
+      return accumaltorArr;
+    }, []);
     return result;
 
     // Annotation:
@@ -595,9 +620,15 @@ const nationalParksPrompts = {
     //   'canyoneering',
     //   'backpacking',
     //   'rock climbing' ]
-
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    let activities = [];
+    const result = nationalParks.forEach(park => {
+      park.activities.forEach( activity => {
+        if(!activities.includes(activity)) {
+          activities.push(activity);
+        }
+      });
+    });
+    return activities;
 
     // Annotation:
     // Write your annotation here as a comment
